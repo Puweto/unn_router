@@ -1,0 +1,17 @@
+name: unn_route_server
+description: REST API (Dart + MySQL) for the UNN Route Navigator Flutter app.
+publish_to: 'none'
+version: 1.0.0
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  shelf: ^1.4.1
+  shelf_router: ^1.1.4
+  mysql_client: ^0.0.27
+  crypto: ^3.0.3
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^4.0.0
