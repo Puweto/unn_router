@@ -133,8 +133,8 @@ RouteResult planJourney(Origin origin, Place destination, Reference ref) {
       }
       final walkKm = from.$2 + to.$2;
       final timeMin = (_minutes(walkKm, walkKmh) + _minutes(ride.distance, busKmh) + busWaitMin * legs.length).round();
-      final prefersBus = origin.isBusStop || destination.isBusStop;
-      if (timeMin < directWalkMin || (prefersBus && directKm >= 0.4)) {
+      final prefersBus = origin.isBusStop || destination.isBusStop || directKm >= 0.8;
+      if (timeMin <= directWalkMin + 3 || (prefersBus && directKm >= 0.4)) {
         final steps = <String>[];
         if (from.$2 > 0.03) {
           steps.add('Walk about ${(from.$2 * 1000).round()} m from ${origin.name} to ${legs.first.from.name} bus stop.');
@@ -178,6 +178,11 @@ RouteResult planJourney(Origin origin, Place destination, Reference ref) {
     }
   }
 
+  final isShortWalk = directKm < 0.8;
+  final reason = isShortWalk
+      ? 'Walking directly from ${origin.name} to ${destination.name} is quicker than taking a shuttle (about ${(directKm * 1000).round()} m, ~${directWalkMin} min).'
+      : 'No shuttle line connects ${origin.name} to ${destination.name}. Walk directly (about ${(directKm * 1000).round()} m, ~${directWalkMin} min).';
+
   return RouteResult(
     found: true,
     origin: origin.name,
@@ -185,7 +190,7 @@ RouteResult planJourney(Origin origin, Place destination, Reference ref) {
     mode: 'walk',
     distanceKm: directKm,
     timeMin: directWalkMin,
-    steps: ['No shuttle saves you time on this trip. Walk from ${origin.name} to ${destination.name} (about ${(directKm * 1000).round()} m).'],
+    steps: [reason],
     path: [origin.point, destination.point],
     directKm: directKm,
     directWalkMin: directWalkMin,

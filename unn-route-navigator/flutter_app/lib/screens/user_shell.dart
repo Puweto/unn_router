@@ -37,7 +37,7 @@ class _UserShellState extends State<UserShell> {
 
   @override
   Widget build(BuildContext context) {
-    const titles = ['UNN Route Navigator', 'Bus stops & locations', 'Route history'];
+    const titles = ['Campus Route Navigator', 'Bus stops & locations', 'Route history'];
     return Scaffold(
       appBar: AppBar(
         title: Text(titles[_tab]),
@@ -55,7 +55,7 @@ class _UserShellState extends State<UserShell> {
               );
             },
           ),
-          const TextButton(onPressed: Session.end, child: Text('Sign out', style: TextStyle(color: Colors.white))),
+          const TextButton(onPressed: Session.end, child: Text('Sign out', style: TextStyle(color: Color(0xFF0B5D34), fontWeight: FontWeight.bold))),
         ],
       ),
       body: FutureBuilder<Reference>(

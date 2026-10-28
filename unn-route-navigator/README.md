@@ -1,4 +1,4 @@
-# UNN Route Navigator
+# Campus Route Navigator
 
 Campus route navigator for the University of Nigeria, Nsukka. **100% Dart and Flutter.**
 
@@ -79,7 +79,7 @@ The Director of Transport fixes this in the app: sign in as Director, open **Loc
 ## What changed in Chapter 3 (update your document)
 
 - **Tables:** the database has 6 tables. The `roads` table (Table 3.4) is removed; the `routes` table (bus stop to bus stop, with distance) is the network Dijkstra searches. Update the class diagram (remove `Road`) and the list of tables in 3.3.3.
-- **Table 3.1 users:** `user_id`, `fullname` (unique), `role`, `date_registered`. Email and password are gone; sign-in is by name. The Director keeps `username` and a hashed `password`.
+- **Table 3.1 users:** `user_id`, `fullname` (unique), `date_registered`. Email, password and role are gone; sign-in is by name. The Director keeps `username` and a hashed `password`.
 - **Use case / activity / sequence diagrams:** "Provide User Information" is just the name. Route calculation (Dijkstra) runs inside the Flutter app after it fetches route data from MySQL; Google Maps displays the result.
 - **Class diagram:** `User` has `userId`, `fullName`, `dateRegistered`; no email.
 - **Tools statement:** Flutter and Dart (app and API server), Google Maps API, GPS (`geolocator`), MySQL.

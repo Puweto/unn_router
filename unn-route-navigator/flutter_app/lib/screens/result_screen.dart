@@ -23,7 +23,7 @@ class ResultScreen extends StatelessWidget {
               Navigator.of(context).popUntil((x) => x.isFirst);
               Session.end();
             },
-            child: const Text('Sign out', style: TextStyle(color: Colors.white)),
+            child: const Text('Sign out', style: TextStyle(color: Color(0xFF0B5D34), fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -54,10 +54,7 @@ class ResultScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     RouteMap(
                       path: r.path,
-                      stops: r.busStops,
-                      locations: [for (final l in reference.locations) l.point],
-                      namedRoutes: reference.namedRouteSegments,
-                      network: reference.routeLines,
+                      distanceKm: r.distanceKm,
                       pathLines: r.lines,
                       walkingTimeMin: r.directWalkMin ?? r.timeMin,
                       height: 360,

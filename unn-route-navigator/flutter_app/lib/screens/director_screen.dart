@@ -20,8 +20,7 @@ class _Resource {
   final String label, path, idKey;
   final List<String> columns;
   final List<_Field> fields;
-  final bool readOnly, noDelete;
-  const _Resource(this.label, this.path, this.idKey, this.columns, {this.fields = const [], this.readOnly = false, this.noDelete = false});
+  const _Resource(this.label, this.path, this.idKey, this.columns, {this.fields = const []});
   String get writePath => '/admin/$path';
 }
 
@@ -37,11 +36,9 @@ const _resources = <_Resource>[
         _Field('end_stop', 'To stop', _Kind.stop),
         _Field('distance', 'Distance (km)', _Kind.number, required: false, hint: _autoDistance),
       ]),
-  _Resource('Users', 'users', 'user_id', ['fullname', 'role', 'date_registered'], readOnly: true),
-  _Resource('Search history', 'history', 'history_id', ['fullname', 'source', 'destination', 'search_date'], readOnly: true, noDelete: true),
 ];
 
-/// Director of Transport: Manage Locations / Bus Stops / Bus Routes / Road Network / Users, View Search History.
+/// Director of Transport: Manage Locations, Bus stops and Bus routes.
 class DirectorScreen extends StatefulWidget {
   const DirectorScreen({super.key});
   @override
@@ -62,8 +59,7 @@ class _DirectorScreenState extends State<DirectorScreen> {
 
   void _load() {
     final res = _res;
-    // Public list for editable resources, admin endpoints for users and history.
-    final listPath = res.readOnly ? '/admin/${res.path}' : '/${res.path}';
+    final listPath = '/${res.path}';
     _data = () async {
       final ref = await Api.reference();
       final rows = await Api.adminList(listPath);
@@ -78,7 +74,6 @@ class _DirectorScreenState extends State<DirectorScreen> {
     if (v == null) return '—';
     if (col == 'start_stop' || col == 'end_stop') return ref.stopName(v as int) ?? '$v';
     if (col == 'start_location' || col == 'end_location') return ref.locationName(v as int) ?? '$v';
-    if (col == 'date_registered' || col == 'search_date') return formatWhen('$v');
     return '$v';
   }
 
@@ -117,18 +112,16 @@ class _DirectorScreenState extends State<DirectorScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Director of Transport'),
-        actions: const [TextButton(onPressed: Session.end, child: Text('Sign out', style: TextStyle(color: Colors.white)))],
+        actions: const [TextButton(onPressed: Session.end, child: Text('Sign out', style: TextStyle(color: Color(0xFF0B5D34), fontWeight: FontWeight.bold)))],
       ),
-      floatingActionButton: _res.readOnly
-          ? null
-          : FloatingActionButton.extended(
-              onPressed: () async {
-                final (ref, _) = await _data;
-                if (mounted) _edit(ref);
-              },
-              icon: const Icon(Icons.add),
-              label: const Text('Add'),
-            ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () async {
+          final (ref, _) = await _data;
+          if (mounted) _edit(ref);
+        },
+        icon: const Icon(Icons.add),
+        label: const Text('Add'),
+      ),
       body: Column(
         children: [
           SizedBox(
@@ -169,12 +162,13 @@ class _DirectorScreenState extends State<DirectorScreen> {
                         title: Text(_cell(row, cols.first, ref), style: const TextStyle(fontWeight: FontWeight.w700)),
                         subtitle: Text([for (final c in cols.skip(1)) '${c.replaceAll('_', ' ')}: ${_cell(row, c, ref)}'].join('\n')),
                         isThreeLine: cols.length > 2,
-                        trailing: _res.noDelete
-                            ? null
-                            : Row(mainAxisSize: MainAxisSize.min, children: [
-                                if (!_res.readOnly) IconButton(icon: const Icon(Icons.edit_outlined), tooltip: 'Edit', onPressed: () => _edit(ref, row: row)),
-                                IconButton(icon: const Icon(Icons.delete_outline), tooltip: 'Delete', onPressed: () => _delete(row)),
-                              ]),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(icon: const Icon(Icons.edit_outlined), tooltip: 'Edit', onPressed: () => _edit(ref, row: row)),
+                            IconButton(icon: const Icon(Icons.delete_outline), tooltip: 'Delete', onPressed: () => _delete(row)),
+                          ],
+                        ),
                       ),
                     );
                   },

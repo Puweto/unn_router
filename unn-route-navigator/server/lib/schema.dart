@@ -4,7 +4,6 @@ const schemaStatements = <String>[
   '''CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     fullname VARCHAR(100) NOT NULL UNIQUE,
-    role VARCHAR(20) NOT NULL DEFAULT 'user',
     date_registered DATETIME NOT NULL
   )''',
   '''CREATE TABLE IF NOT EXISTS director_of_transport (

@@ -134,7 +134,7 @@ Handler buildHandler(Db db, Config cfg) {
     var u = await db.get('SELECT user_id, fullname FROM users WHERE fullname = :n', {'n': name});
     var isNew = false;
     if (u == null) {
-      await db.run("INSERT INTO users (fullname, role, date_registered) VALUES (:n, 'user', UTC_TIMESTAMP())", {'n': name});
+      await db.run("INSERT INTO users (fullname, date_registered) VALUES (:n, UTC_TIMESTAMP())", {'n': name});
       u = await db.get('SELECT user_id, fullname FROM users WHERE fullname = :n', {'n': name});
       isNew = true;
     }
@@ -187,25 +187,6 @@ Handler buildHandler(Db db, Config cfg) {
     final t = authed(r, 'user');
     final rows = await db.all(
         'SELECT history_id, source, destination, search_date FROM route_history WHERE user_id = :u ORDER BY history_id DESC LIMIT 50', {'u': t['sub']});
-    return _json([for (final x in rows) typed(x)]);
-  });
-
-  // ---------- Director of Transport ----------
-  router.get('/api/admin/users', (Request r) async {
-    authed(r, 'director');
-    final rows = await db.all('SELECT user_id, fullname, role, date_registered FROM users ORDER BY user_id DESC');
-    return _json([for (final x in rows) typed(x)]);
-  });
-  router.delete('/api/admin/users/<id>', (Request r, String id) async {
-    authed(r, 'director');
-    final x = await db.run('DELETE FROM users WHERE user_id = :i', {'i': int.tryParse(id) ?? 0});
-    if (x.changes == 0) throw HttpError(404, 'User not found');
-    return _json({'ok': true});
-  });
-  router.get('/api/admin/history', (Request r) async {
-    authed(r, 'director');
-    final rows = await db.all(
-        'SELECT h.history_id, u.fullname, h.source, h.destination, h.search_date FROM route_history h JOIN users u ON u.user_id = h.user_id ORDER BY h.history_id DESC LIMIT 200');
     return _json([for (final x in rows) typed(x)]);
   });
 

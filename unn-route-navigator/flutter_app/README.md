@@ -1,4 +1,4 @@
-# UNN Route Navigator: Flutter app
+# Campus Route Navigator: Flutter app
 
 Dart / Flutter app (Android and iOS). It needs the API server from `../server` running, and a Google Maps API key. See the main `README.md` for the whole setup; this file is the app-specific part.
 

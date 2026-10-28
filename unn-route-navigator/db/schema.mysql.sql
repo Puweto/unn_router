@@ -3,7 +3,7 @@
 -- The Dart server creates all of this automatically on first start, so importing this file is optional.
 -- The shuttle network that Dijkstra's algorithm searches is the `routes` table (bus stop to bus stop, with distance).
 -- Changes from the draft tables:
---   * users: name only (no email/password/role input); date_registered added
+--   * users: name only (no email/password input); date_registered added
 --   * latitude/longitude are DECIMAL(10,7) (a bare DECIMAL would round to whole degrees)
 --   * routes.route_name added (BusRoute.routeName in the class diagram)
 --   * distances are in kilometres
@@ -13,7 +13,6 @@ USE unn_route_navigator;
 CREATE TABLE IF NOT EXISTS users (
   user_id         INT AUTO_INCREMENT PRIMARY KEY,
   fullname        VARCHAR(100) NOT NULL UNIQUE,
-  role            VARCHAR(20)  NOT NULL DEFAULT 'user',
   date_registered DATETIME     NOT NULL
 );
 

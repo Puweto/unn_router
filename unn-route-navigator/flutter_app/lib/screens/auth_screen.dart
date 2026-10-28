@@ -40,7 +40,7 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('UNN Route Navigator')),
+      appBar: AppBar(title: const Text('Campus Route Navigator')),
       body: SafeArea(
         child: ListView(
           padding: const EdgeInsets.all(16),
